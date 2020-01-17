@@ -3,6 +3,9 @@ from . import views
 
 app_name = 'auto_partner'
 urlpatterns = [
-    path('', views.login, name='login'),
+    path('register/', views.register, name='register'),
+    path('login/', views.login_request, name='login'),
+    path('logout/', views.logout_request, name='logout'), 
+    path('', views.base, name='base'),
 ]
 

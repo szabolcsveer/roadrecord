@@ -1,15 +1,23 @@
 {% extends 'base.html' %}
 
-{% block body %}
-<h1>Welcome</h1>
+{% load crispy_forms_tags %}
 
-<p>
-  Login here!
-</p>
+<div class="d-flex justify-content-center">
+  {% block content %}
+  <h1 class="text-center">Welcome</h1>
+  <p class="text-center">
+    Login here!
+  </p>
+  <div class="container">
+    <form method="POST">
+      <div class="form-group">
+        {% csrf_token %}
+        {{ form|crispy}}
+        <button class="btn btn-primary" type="submit">Login</button>
+      </div>
+    </form>
 
-<form method="POST">
-  {% csrf_token %}
-  {{ form.as_p}}
-  <button class="btn btn-primary" type="button">Login</button>
-</form>
-{% endblock  %}
+    <p>If you are not registered, please register by clicking <a href="/register">here</a></p>
+  </div>
+  {% endblock  %}
+</div>
