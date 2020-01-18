@@ -2,6 +2,14 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.core import serializers
+from django.views.decorators.csrf import csrf_protect
+from rest_framework import status, serializers
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.forms import ModelForm
 
 def base(request):
     return render(request, 'base.html')
@@ -44,3 +52,13 @@ def register(request):
     return render(request,
                 'auto_partner/register.html',
                 context={"form": form})
+
+def get_auto(request, auto_id):
+    if request.method == 'GET':
+        try:
+            auto = Auto.objects.get(id=auto_id)
+            response = serializers.serialize('json', [auto])
+        except:
+            response = [{'Error': 'No auto with that id'}]
+
+    return HttpResponse(response, content_type='text/json')
