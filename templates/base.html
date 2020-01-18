@@ -30,6 +30,7 @@
 
   {% block content %}
   <div class="container">
+    {% csrf_token %}
     <h1 class="text-center">Welcome to Django Auto-Partner App</h1>
     {% if messages %}
     <div class="messages">

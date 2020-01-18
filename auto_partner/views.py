@@ -10,7 +10,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.forms import ModelForm
-from auto_partner.serializers import AutoSerializer
+from auto_partner.serializers import AutoSerializer, PartnerSerializer
 from auto_partner.models import Auto, Partner, AutoPartnerRelation
 
 def base(request):
@@ -55,6 +55,7 @@ def register(request):
                 'auto_partner/register.html',
                 context={"form": form})
 
+# AUTO REQUESTS
 def get_auto(request, auto_id):
     if request.method == 'GET':
         try:
@@ -71,11 +72,48 @@ def get_auto(request, auto_id):
 @api_view(['GET', 'POST'])
 def create_auto(request):
     if request.method == 'POST':
-        try:
             serializer = AutoSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)         
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@csrf_exempt
+@api_view(['DELETE'])
+def delete_auto(request, auto_id):
+    auto = Auto.objects.get(id=auto_id)
+    if request.method == 'DELETE':
+        auto.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
+# PARTNER REQUESTS
+
+def get_partner(request, partner_id):
+    if request.method == 'GET':
+        try:
+            partner = Partner.objects.get(id=partner_id)
+            print(partner)
+            response = serializers.serialize('json', [partner])
         except Exception as e:
             print(e)
-            serializer = [{}]
-    return Response(serializer.data, content_type='application/json')
+            response = [{'Error': 'No partner with that id'}]
+
+    return HttpResponse(response, content_type='text/json')
+
+@csrf_exempt
+@api_view(['GET', 'POST'])
+def create_partner(request):
+    if request.method == 'POST':
+            serializer = PartnerSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)         
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@csrf_exempt
+@api_view(['DELETE'])
+def delete_partner(request, partner_id):
+    partner = Partner.objects.get(id=partner_id)
+    if request.method == 'DELETE':
+        partner.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
