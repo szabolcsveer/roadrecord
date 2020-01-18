@@ -12,6 +12,7 @@ from rest_framework.response import Response
 from django.forms import ModelForm
 from auto_partner.serializers import AutoSerializer, PartnerSerializer
 from auto_partner.models import Auto, Partner, AutoPartnerRelation
+from django.contrib.auth.decorators import login_required
 
 def base(request):
     return render(request, 'base.html')
@@ -56,6 +57,7 @@ def register(request):
                 context={"form": form})
 
 # AUTO REQUESTS
+@login_required(login_url='/login')
 def get_auto(request, auto_id):
     if request.method == 'GET':
         try:
@@ -68,6 +70,7 @@ def get_auto(request, auto_id):
 
     return HttpResponse(response, content_type='text/json')
 
+@login_required(login_url='/login')
 @csrf_exempt
 @api_view(['GET', 'POST'])
 def create_auto(request):
@@ -78,16 +81,17 @@ def create_auto(request):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)         
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@login_required(login_url='/login')
 @csrf_exempt
 @api_view(['DELETE'])
 def delete_auto(request, auto_id):
     auto = Auto.objects.get(id=auto_id)
-    if request.method == 'DELETE':
-        auto.delete()
-    return Response(status=status.HTTP_204_NO_CONTENT)
+    if auto is not None:
+        if request.method == 'DELETE':
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
 # PARTNER REQUESTS
-
+@login_required(login_url='/login')
 def get_partner(request, partner_id):
     if request.method == 'GET':
         try:
@@ -100,6 +104,7 @@ def get_partner(request, partner_id):
 
     return HttpResponse(response, content_type='text/json')
 
+@login_required(login_url='/login')
 @csrf_exempt
 @api_view(['GET', 'POST'])
 def create_partner(request):
@@ -110,6 +115,7 @@ def create_partner(request):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)         
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@login_required(login_url='/login')
 @csrf_exempt
 @api_view(['DELETE'])
 def delete_partner(request, partner_id):

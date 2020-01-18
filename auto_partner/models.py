@@ -10,9 +10,9 @@ class Partner(models.Model):
     address = models.CharField(blank=False, max_length=200)
     company_name = models.CharField(blank=False, max_length=200)
     assigned_autos = []
-    created_at = UnixTimeStampField(blank=False, default=0)
-    modify_at = UnixTimeStampField(blank=False, default=0)
-    deleted_at = UnixTimeStampField(null=True)
+    created_at = UnixTimeStampField(auto_now_add=True)
+    modify_at = UnixTimeStampField(auto_now=True)
+    deleted_at = UnixTimeStampField(auto_now=True)
     autos = models.ManyToManyField('Auto', through='AutoPartnerRelation')
 
     def __str__(self):
@@ -31,9 +31,9 @@ class Auto(models.Model):
     type = models.CharField(
     choices=[(COMPANY, 'Company'), (PRIVATE, 'Private')], max_length=200)
     assigned_partners = []
-    created_at = UnixTimeStampField(blank=False, default=0)
-    modify_at = UnixTimeStampField(blank=False, default=0)
-    deleted_at = UnixTimeStampField(null=True)
+    created_at = UnixTimeStampField(auto_now_add=True)
+    modify_at = UnixTimeStampField(auto_now=True)
+    deleted_at = UnixTimeStampField(auto_now=True)
     partners = models.ManyToManyField('Partner', through='AutoPartnerRelation')
 
     def __str__(self):
