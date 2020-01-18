@@ -6,10 +6,12 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
 from django.views.decorators.csrf import csrf_protect
-from rest_framework import status, serializers
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.forms import ModelForm
+from auto_partner.serializers import AutoSerializer
+from auto_partner.models import Auto, Partner, AutoPartnerRelation
 
 def base(request):
     return render(request, 'base.html')
@@ -57,8 +59,23 @@ def get_auto(request, auto_id):
     if request.method == 'GET':
         try:
             auto = Auto.objects.get(id=auto_id)
+            print(auto)
             response = serializers.serialize('json', [auto])
-        except:
+        except Exception as e:
+            print(e)
             response = [{'Error': 'No auto with that id'}]
 
     return HttpResponse(response, content_type='text/json')
+
+@csrf_exempt
+@api_view(['GET', 'POST'])
+def create_auto(request):
+    if request.method == 'POST':
+        try:
+            serializer = AutoSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+        except Exception as e:
+            print(e)
+            serializer = [{}]
+    return Response(serializer.data, content_type='application/json')
