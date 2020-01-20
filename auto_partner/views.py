@@ -16,7 +16,7 @@ from django.contrib.auth.decorators import login_required
 
 def base(request):
     return render(request, 'base.html')
-
+@csrf_exempt
 def login_request(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
@@ -57,6 +57,18 @@ def register(request):
                 context={"form": form})
 
 # AUTO REQUESTS
+
+@login_required(login_url='/login')
+def get_all_auto(request):
+    if request.method == 'GET':
+        all_autos = Auto.objects.all()
+        print(all_autos)
+        response = []
+        for item in all_autos:
+            obj = dict(driver = item.driver,)
+            response.append(obj)
+    return HttpResponse(response)
+
 @login_required(login_url='/login')
 def get_auto(request, auto_id):
     if request.method == 'GET':
@@ -91,7 +103,7 @@ def delete_auto(request, auto_id):
             return Response(status=status.HTTP_204_NO_CONTENT)
 
 # PARTNER REQUESTS
-@login_required(login_url='/login')
+# @login_required(login_url='/login')
 def get_partner(request, partner_id):
     if request.method == 'GET':
         try:
@@ -104,7 +116,7 @@ def get_partner(request, partner_id):
 
     return HttpResponse(response, content_type='text/json')
 
-@login_required(login_url='/login')
+# @login_required(login_url='/login')
 @csrf_exempt
 @api_view(['GET', 'POST'])
 def create_partner(request):
@@ -115,7 +127,7 @@ def create_partner(request):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)         
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@login_required(login_url='/login')
+# @login_required(login_url='/login')
 @csrf_exempt
 @api_view(['DELETE'])
 def delete_partner(request, partner_id):
@@ -123,3 +135,8 @@ def delete_partner(request, partner_id):
     if request.method == 'DELETE':
         partner.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+# @csrf_exempt
+# @api_view(['GET', 'POST'])
+# def create_auto_partner_relation(request):
+#     if request.method == 'POST':
