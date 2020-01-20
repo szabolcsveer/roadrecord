@@ -103,7 +103,7 @@ def delete_auto(request, auto_id):
             return Response(status=status.HTTP_204_NO_CONTENT)
 
 # PARTNER REQUESTS
-# @login_required(login_url='/login')
+@login_required(login_url='/login')
 def get_partner(request, partner_id):
     if request.method == 'GET':
         try:
@@ -116,7 +116,7 @@ def get_partner(request, partner_id):
 
     return HttpResponse(response, content_type='text/json')
 
-# @login_required(login_url='/login')
+@login_required(login_url='/login')
 @csrf_exempt
 @api_view(['GET', 'POST'])
 def create_partner(request):
@@ -127,7 +127,7 @@ def create_partner(request):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)         
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# @login_required(login_url='/login')
+@login_required(login_url='/login')
 @csrf_exempt
 @api_view(['DELETE'])
 def delete_partner(request, partner_id):

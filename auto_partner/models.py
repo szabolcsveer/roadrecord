@@ -1,6 +1,7 @@
 from django.db import models
 from unixtimestampfield.fields import UnixTimeStampField
 from django.contrib import admin
+from django.contrib.postgres.fields import ArrayField
 
 
 class Partner(models.Model):
@@ -9,7 +10,7 @@ class Partner(models.Model):
     city = models.CharField(blank=False, max_length=200)
     address = models.CharField(blank=False, max_length=200)
     company_name = models.CharField(blank=False, max_length=200)
-    assigned_autos = []
+    assigned_autos = ArrayField(models.CharField(max_length=10, blank=True))
     created_at = UnixTimeStampField(auto_now_add=True)
     modify_at = UnixTimeStampField(auto_now=True)
     deleted_at = UnixTimeStampField(auto_now=True)
@@ -30,7 +31,7 @@ class Auto(models.Model):
     PRIVATE = 'Private'
     type = models.CharField(
     choices=[(COMPANY, 'Company'), (PRIVATE, 'Private')], max_length=200)
-    assigned_partners = []
+    assigned_partners = ArrayField(models.CharField(max_length=10, blank=True))
     created_at = UnixTimeStampField(auto_now_add=True)
     modify_at = UnixTimeStampField(auto_now=True)
     deleted_at = UnixTimeStampField(auto_now=True)
