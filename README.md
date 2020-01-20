@@ -1,9 +1,9 @@
-# GUIDE
-
-# Packages Installed while working on this project
-
-# Package                   Version
 ```
+GUIDE
+
+Packages Installed while working on this project
+
+Package                   Version
 ------------------------- -------
 astroid                   2.3.3
 colorama                  0.4.3
