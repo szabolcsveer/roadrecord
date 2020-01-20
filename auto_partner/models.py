@@ -10,7 +10,7 @@ class Partner(models.Model):
     city = models.CharField(blank=False, max_length=200)
     address = models.CharField(blank=False, max_length=200)
     company_name = models.CharField(blank=False, max_length=200)
-    assigned_autos = ArrayField(models.CharField(max_length=10, blank=True))
+    assigned_autos = ArrayField(models.CharField(max_length=10, blank=True), default=list)
     created_at = UnixTimeStampField(auto_now_add=True)
     modify_at = UnixTimeStampField(auto_now=True)
     deleted_at = UnixTimeStampField(auto_now=True)
@@ -31,7 +31,7 @@ class Auto(models.Model):
     PRIVATE = 'Private'
     type = models.CharField(
     choices=[(COMPANY, 'Company'), (PRIVATE, 'Private')], max_length=200)
-    assigned_partners = ArrayField(models.CharField(max_length=10, blank=True))
+    assigned_partners = ArrayField(models.CharField(max_length=10, blank=True), default=list)
     created_at = UnixTimeStampField(auto_now_add=True)
     modify_at = UnixTimeStampField(auto_now=True)
     deleted_at = UnixTimeStampField(auto_now=True)
