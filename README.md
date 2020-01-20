@@ -1,8 +1,9 @@
-GUIDE
+# GUIDE
 
-Packages Installed while working on this project
+# Packages Installed while working on this project
 
-Package                   Version
+# Package                   Version
+```
 ------------------------- -------
 astroid                   2.3.3
 colorama                  0.4.3
@@ -41,4 +42,4 @@ in JSON format.
 On http://127.0.0.1:8000/register you can register a new user, and then you can login on
 http://127.0.0.1:8000/login 
 If you visit http://127.0.0.1:8000/auto/:id you can look up that particular instance  
-
+```
